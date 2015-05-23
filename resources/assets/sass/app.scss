@@ -1,0 +1,227 @@
+@import "_bootstrap";
+
+body, label, .checkbox label {
+  font-weight: 300;
+}
+body {
+  background: #fff;
+}
+a {
+  color:#2185C5;
+  &:hover {
+    color:#7C6289;
+    text-decoration: none;
+  }
+}
+.main-content {
+  background: url('icons/mooning.png');
+  padding-top:10px;
+}
+
+/* Utility classes */
+.date {
+}
+.date-created-at {
+  @extend .date;
+  color:#7C7C7C;
+}
+.project-title {
+  color:#DE6262;
+}
+.modal-backdrop {
+  background:#fff;
+}
+.group-heading {
+  text-transform:uppercase;
+  color:#606060;
+  text-shadow:1px 1px 1px #ddd;
+  letter-spacing:-0.038em;
+}
+.strikethrough {
+  text-decoration:line-through;
+}
+.todo {
+  background:#63A69F;
+}
+.todo-text {
+  color: #63A69F;
+}
+.inprogress {
+  background:#F2836B;
+}
+.inprogress-text {
+  color:#F2836B;
+}
+.complete {
+  background:#3E454C;
+}
+.complete-text {
+  color:#3E454C;
+}
+.task {
+  background:#A49A87;
+}
+.improvement {
+  background:#644D52;
+}
+.story {
+  background:#2185C5;
+}
+.bug {
+  background:#CD2C24;
+}
+.issue-id {
+  color:#2185C5;
+}
+.date-range {
+  padding:2em 0 0 0;
+}
+.grey {
+  color:#8c8c8c;
+}
+
+/* Top nav */
+.navbar.navbar-default {
+  border-radius: 0 0 25% 25%;
+  box-shadow:0 1px 0 0 #E6E6E6, 0 0 0 1px #E6E6E6;
+}
+
+/* UI cards for project list view */
+.project-card {
+  background: #fff;
+  padding: 0.05em 0.4em;
+  border-radius: 0.3em;
+  box-shadow: 0 3px 0 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+  margin-bottom: 1.2em;
+  min-height: 150px;
+
+  &:hover {
+    box-shadow:0 3px 0 0 #bebebf, 0 0 0 1px rgba(39,41,43,.3);
+  }
+  hr {
+    margin-top: 2em;
+    margin-bottom: 0.2em;
+  }
+  .header, .content {
+  }
+  .content {
+  }
+  .project-card-stats {
+    position:absolute;
+    bottom:12px;
+    right:20px;
+  }
+  .project-card-actions {
+    position:absolute;
+    bottom:23px;
+    left:23px;
+  }
+  .sprint-stat {
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .sprint-stats-container {
+    margin-top:15px;
+    margin-bottom: 15px;
+    background: #EFEFEF;
+    margin-left: 0;
+    margin-right: 0;
+    box-shadow: inset 0 0 10px #c9c9c9;
+  }
+}
+
+.tagline, .deadline {
+  color:rgba(0,0,0,.4)
+}
+
+.card-stat {
+  padding:0.1em;
+  .card-stat-icon {
+    color:#515151;
+  }
+}
+
+/* Project: work view */
+.project-work {
+  .sprint-list {
+    min-height: 300px;
+    background:#d0d0d0;
+    li{
+      background:white;
+      border-radius:5px;
+      margin: 0.4em 0 0.4em 0;
+      padding: 0.65em;
+      min-height:50px;
+      span.issue-status, span.issue-type {
+        padding:0.2em 0.4em;
+        border-radius:5px;
+        color:#fff;
+      }
+      span.issue-status {
+        font-size:0.9em;
+      }
+      span.issue-type {
+        margin-right:4px;
+        font-size:0.9em;
+      }
+    }
+  }
+}
+
+.ui-state-default {
+  border:1px solid #d3d3d3;
+}
+
+/* Project: plan view */
+#action-add-sprint-body {
+  display:none;
+  background:#eee;
+  padding:0.2em;
+}
+.project-plan {
+  .sprint-list {
+    min-height: 200px;
+    background:#d0d0d0;
+    li {
+      background:white;
+      border-radius:5px;
+      margin: 0.4em 0 0.4em 0;
+      padding: 0.65em;
+      min-height:50px;
+      span.issue-status, span.issue-type {
+        padding:0.2em 0.4em;
+        border-radius:5px;
+        color:#fff;
+      }
+      span.issue-status {
+        font-size:0.9em;
+      }
+      span.issue-type {
+        margin-right:4px;
+        font-size:0.9em;
+      }
+      span.issue-deadline {
+        margin-right:4px;
+      }
+      .issue-actions-attributes {
+        margin-top:10px;
+        .issue-actions {
+          button {
+            padding: 0.2em 0.4em;
+            font-size: 0.95em;
+          }
+        }
+      }
+    }
+  }
+  .sprint-activate-btn {
+    background:#ddd;
+    &:hover {
+      background:#efefef;
+    }
+  }
+  .sprint-activate-form {
+    display:none;
+  }
+}
