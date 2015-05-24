@@ -9,11 +9,11 @@ Your very own Scrum/Agile web app built with Laravel
 
 ### Screenshots
 
-#### Project: Plan View
+*Project: Plan View*
 ![alt tag](https://raw.githubusercontent.com/modestkdr/Scrumwala/master/screenshots/project-plan-view.png)
 
 
-#### Project: Work View
+*Project: Work View*
 ![alt tag](https://raw.githubusercontent.com/modestkdr/Scrumwala/master/screenshots/project-show-view.png)
 
 ### Install Instructions
