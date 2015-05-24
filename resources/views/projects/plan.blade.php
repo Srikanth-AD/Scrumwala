@@ -37,11 +37,11 @@
                     <h5 class="group-heading">Actions</h5>
                     <div class="btn-group" role="group">
                         <button id="action-add-sprint" type="button" class="btn btn-default">
-                            <img alt="add issue" width="18" height="18"
+                            <img alt="add sprint" width="18" height="18"
                                  src="{{asset('css/icons/ic_add_black_36dp.png')}}" />
                             Add Sprint
                         </button>
-                        <button type="button" class="btn btn-default">
+                        <button id="action-add-issue" type="button" class="btn btn-default">
                             <img alt="add issue" width="18" height="18"
                                  src="{{asset('css/icons/ic_add_black_36dp.png')}}" />
                             Add Issue
@@ -53,6 +53,17 @@
                 <div class="col-md-12" id="action-add-sprint-body">
                     <div class="col-md-8">
                         @include('projects.plan.sprints-add-form')
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>                    
+                </div>
+                <div class="col-md-12" id="action-add-issue-body">
+                    <div class="col-md-8">
+                        @include('projects.plan.issue-add-form')
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
             </div>

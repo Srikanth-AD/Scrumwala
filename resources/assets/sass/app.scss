@@ -153,7 +153,8 @@ a {
       margin: 0.4em 0 0.4em 0;
       padding: 0.65em;
       min-height:50px;
-      span.issue-status, span.issue-type {
+      span.issue-status, 
+      span.issue-type {
         padding:0.2em 0.4em;
         border-radius:5px;
         color:#fff;
@@ -174,7 +175,8 @@ a {
 }
 
 /* Project: plan view */
-#action-add-sprint-body {
+#action-add-sprint-body,
+#action-add-issue-body {
   display:none;
   background:#eee;
   padding:0.2em;

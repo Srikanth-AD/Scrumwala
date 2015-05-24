@@ -19,6 +19,7 @@ Route::resource('projects', 'ProjectsController');
 Route::get('issues/search', 'IssuesController@search');
 Route::post('issues/statuschange', 'IssuesController@statuschange');
 Route::post('issues/sprintchange', 'IssuesController@sprintchange');
+Route::post('issues/quickAdd', 'IssuesController@quickAdd');
 Route::resource('issues', 'IssuesController');
 Route::resource('issuestatuses', 'IssueStatusesController');
 

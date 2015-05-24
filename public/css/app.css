@@ -4978,7 +4978,7 @@ a {
   border: 1px solid #d3d3d3; }
 
 /* Project: plan view */
-#action-add-sprint-body {
+#action-add-sprint-body, #action-add-issue-body {
   display: none;
   background: #eee;
   padding: 0.2em; }

@@ -7,6 +7,7 @@ use App\Services\Pagination;
 use Request;
 use App\Http\Requests\IssueRequest;
 use App\Http\Requests\IssueSearchRequest;
+use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
 use App\Issue;
 use App\Sprint;
@@ -71,7 +72,7 @@ class IssuesController extends Controller {
 	 * @return Response
 	 */
 	public function store(IssueRequest $request)
-	{
+	{		
 		$todoIssueStatusId = IssueStatus::getIdByMachineName('todo');
 		$request['user_id'] = Auth::user()->id;
 		$issue = new Issue;
@@ -79,6 +80,23 @@ class IssuesController extends Controller {
 		$request['status_id'] = $todoIssueStatusId;
 		$issue->create($request->all());
 		return redirect('projects/' . $request->project_id);
+	}
+
+	/**
+	 * [quickAdd Add an issue from project plan view - inline form ]
+	 * @param  IssueRequest $request [description]
+	 * @return [type]                [description]
+	 */
+	public function quickAdd(IssueRequest $request)
+	{
+		$todoIssueStatusId = IssueStatus::getIdByMachineName('todo');
+		$request['user_id'] = Auth::user()->id;
+		$issue = new Issue;
+		$request['sprint_id'] = Project::find($request->project_id)->getBacklogSprint()->id;
+		$request['status_id'] = $todoIssueStatusId;
+		$issue->create($request->all());
+		return Redirect::back();
+
 	}
 
 	/**

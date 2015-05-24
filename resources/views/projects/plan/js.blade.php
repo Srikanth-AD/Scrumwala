@@ -49,6 +49,16 @@
             $("#action-add-sprint-body").fadeIn().show();
         });
 
+        // Display the inline form for adding an issue
+        $("#action-add-issue").on('click', function() {
+            $("#action-add-issue-body").show();
+        });
+
+        // When the close icon is clicked, close the parent section (for inline forms)
+        $(".close").on('click', function() {
+            $(this).parent().parent().fadeOut();
+        })
+
         // Archive an issue
         $('.archive-issue').on('click', function() {
             if (confirm('Are you sure?')) {
@@ -98,6 +108,8 @@
             });
         });
 
+        
+        // Toggle: show/hide sprint
         $(".toggle").on("click", function() { 
           var listId = $(this).parent('h3').attr('data-machine-name');
           $("#" + listId).slideToggle();
