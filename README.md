@@ -2,6 +2,10 @@
 Your very own Scrum/Agile web app built with Laravel
 
 ### Features
+* Create and manage projects with plan and work views
+* Group issues in a project into sprints
+* Set deadlines for issues, active sprints and projects
+* Get reminders via email listing issues nearing deadline
 
 ### Screenshots
 
