@@ -112,7 +112,7 @@
             </div>
             @else
                 <h2>No projects found</h2>
-                <p><a href="/projects/create">Create a new project</a></p>
+                <h3><a href="/projects/create">Create your first project</a></h3> 
         </div>
     @endif
 @endsection

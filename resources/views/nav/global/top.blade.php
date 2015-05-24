@@ -22,14 +22,16 @@
 							<li><a href="{{ url('/projects/create') }}">Create</a></li>
 						</ul>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"
-						   role="button" aria-expanded="false">Issue <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="{{ url('/issues') }}">List</a></li>
-							<li><a href="{{ url('/issues/create') }}">Create</a></li>
-						</ul>
-					</li>
+					@if(App\Project::all()->count() > 0)
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+							   role="button" aria-expanded="false">Issue <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="{{ url('/issues') }}">List</a></li>
+								<li><a href="{{ url('/issues/create') }}">Create</a></li>
+							</ul>
+						</li>
+					@endif
 				</ul>
 			</div>
 		@endunless
