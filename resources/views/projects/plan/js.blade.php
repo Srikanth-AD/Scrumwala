@@ -47,11 +47,13 @@
         // Display the inline form for adding a sprint
         $("#action-add-sprint").on('click', function() {
             $("#action-add-sprint-body").fadeIn().show();
+            $("#action-add-sprint-body form").find("input").filter(":visible").first().focus();
         });
 
         // Display the inline form for adding an issue
         $("#action-add-issue").on('click', function() {
             $("#action-add-issue-body").show();
+            $('#title').focus();
         });
 
         // When the close icon is clicked, close the parent section (for inline forms)
