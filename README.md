@@ -1,6 +1,21 @@
 ### Scrumwala
 Your very own Scrum/Agile web app built with Laravel
 
+### Features
+* Create and manage projects with plan and work views
+* Group issues in a project into sprints
+* Set deadlines for issues, active sprints and projects
+* Get reminders via email listing issues nearing deadline
+
+### Screenshots
+
+*Project: Plan View*
+![alt tag](https://raw.githubusercontent.com/modestkdr/Scrumwala/master/screenshots/project-plan-view.png)
+
+
+*Project: Work View*
+![alt tag](https://raw.githubusercontent.com/modestkdr/Scrumwala/master/screenshots/project-show-view.png)
+
 ### Install Instructions
 To install Scrumwala you can clone the repository:
 
