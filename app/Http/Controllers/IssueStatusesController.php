@@ -34,11 +34,11 @@ class IssueStatusesController extends Controller {
 	 */
 	public function create()
 	{
-		$projectNames = Project::lists('name', 'id');
+		$projectNames = Project::lists('name', 'id')->all();
 		krsort($projectNames);
-		$issueTypeLabels = IssueType::lists('label','id');
+		$issueTypeLabels = IssueType::lists('label','id')->all();
 		krsort($issueTypeLabels);
-		$issueStatusLabels = IssueStatus::lists('label','id');
+		$issueStatusLabels = IssueStatus::lists('label','id')->all();
 		krsort($issueStatusLabels);
 
 		return view('issues.create')->with([
@@ -80,10 +80,10 @@ class IssueStatusesController extends Controller {
 	 */
 	public function edit(Issue $issue)
 	{
-		$projectNames = Project::lists('name', 'id');
-		$issueTypeLabels = IssueType::lists('label','id');
+		$projectNames = Project::lists('name', 'id')->all();
+		$issueTypeLabels = IssueType::lists('label','id')->all();
 		krsort($issueTypeLabels);
-		$issueStatusLabels = IssueStatus::lists('label','id');
+		$issueStatusLabels = IssueStatus::lists('label','id')->all();
 		krsort($issueStatusLabels);
 
 		return view('issues.edit')->with(

@@ -3,7 +3,6 @@ use Auth;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Services\Pagination;
-//use Illuminate\Http\Request;
 use Request;
 use App\Http\Requests\IssueRequest;
 use App\Http\Requests\IssueSearchRequest;
@@ -55,9 +54,9 @@ class IssuesController extends Controller {
 	 */
 	public function create()
 	{
-		$projectNames = Project::lists('name', 'id');
+		$projectNames = Project::lists('name', 'id')->all();
 		krsort($projectNames);
-		$issueTypeLabels = IssueType::lists('label','id');
+		$issueTypeLabels = IssueType::lists('label','id')->all();
 		krsort($issueTypeLabels);
 
 		return view('issues.create')->with([
@@ -116,10 +115,10 @@ class IssuesController extends Controller {
 	 */
 	public function edit(Issue $issue)
 	{
-		$projectNames = Project::lists('name', 'id');
-		$issueTypeLabels = IssueType::lists('label','id');
+		$projectNames = Project::lists('name', 'id')->all();
+		$issueTypeLabels = IssueType::lists('label','id')->all();
 		krsort($issueTypeLabels);
-		$issueStatusLabels = IssueStatus::lists('label','id');
+		$issueStatusLabels = IssueStatus::lists('label','id')->all();
 		krsort($issueStatusLabels);
 		$deadline = ($issue->deadline) ? $issue->deadline->format('Y-m-d') : null;
 
@@ -173,7 +172,7 @@ class IssuesController extends Controller {
 	public function statuschange()
 	{
 		$result = 'There was an error updating the issue status';
-		$issueStatusMachineNames = IssueStatus::lists('machine_name','id');
+		$issueStatusMachineNames = IssueStatus::lists('machine_name','id')->all();
 		$newIssueStatusMachineName = trim(Request::get('machineNameOfNewIssueStatus'));
 
 		if(in_array($newIssueStatusMachineName, $issueStatusMachineNames))
