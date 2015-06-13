@@ -6,14 +6,14 @@ use DB;
 class SprintStatus extends Model {
 
     protected $fillable = [
-        'label',
-        'sort_order'
+    'label',
+    'sort_order'
     ];
 
     public $timestamps = false;
 
     /**
-     * SprintStatus can be used by many sprints
+     * A SprintStatus can be used by many sprints
      * @return type
      */
     public function sprints()
@@ -22,7 +22,7 @@ class SprintStatus extends Model {
     }
 
     /**
-     * Get Id of a sprint status by its machine name
+     * Get id of a sprint status by it's machine name
      * @param string $machineName
      * @return bool|int
      */
@@ -39,12 +39,12 @@ class SprintStatus extends Model {
     }
 
     /**
-     * Get sprint statuses by sort_order
+     * Get sprint statuses by sort_order in ascending order
      */
     public static function getBySortOrder()
     {
         return SprintStatus::where('machine_name', '!=', 'archive')
-            ->orderBy('sort_order', 'asc')->get();
+        ->orderBy('sort_order', 'asc')->get();
     }
 
 }

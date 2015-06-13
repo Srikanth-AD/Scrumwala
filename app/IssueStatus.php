@@ -5,15 +5,20 @@ use DB;
 
 class IssueStatus extends Model {
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'label',
-        'sort_order'
+    'label',
+    'sort_order'
     ];
 
     public $timestamps = false;
 
     /**
-     * IssueStatus can be used by many issues
+     * IssueStatus can belong to many issues
      * @return type
      */
     public function issues()
@@ -22,7 +27,7 @@ class IssueStatus extends Model {
     }
 
     /**
-     * Get Id of a issue status by its machine name
+     * Get id of a issue status by its machine name
      * @param string $machineName
      * @return bool|int
      */
@@ -39,12 +44,12 @@ class IssueStatus extends Model {
     }
 
     /**
-     * Get issue statuses by sort_order
+     * Get issue statuses, except "archive" by sort_order
      */
     public static function getBySortOrder()
     {
         return IssueStatus::where('machine_name', '!=', 'archive')
-                ->orderBy('sort_order', 'asc')->get();
+        ->orderBy('sort_order', 'asc')->get();
     }
 
 }

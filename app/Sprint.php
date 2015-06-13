@@ -5,14 +5,19 @@ use Carbon\Carbon;
 
 class Sprint extends Model {
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'name',
-        'machine_name',
-        'from_date',
-        'to_date',
-        'status_id',
-        'project_id',
-        'sort_order'
+    'name',
+    'machine_name',
+    'from_date',
+    'to_date',
+    'status_id',
+    'project_id',
+    'sort_order'
     ];
 
     public $timestamps = true;
@@ -32,6 +37,11 @@ class Sprint extends Model {
         }
     }
 
+    /**
+     * [getFromDateAttribute return a carbon instance for a given date as string
+     * @param  string $date [description]
+     * @return object|boolean Carbon instance|false
+     */
     public function getFromDateAttribute($date)
     {
         if($date)
@@ -55,6 +65,11 @@ class Sprint extends Model {
         }
     }
 
+    /**
+     * [getToDateAttribute return a carbon instance for a given date as string
+     * @param  string $date [description]
+     * @return object|boolean Carbon instance|false
+     */
     public function getToDateAttribute($date)
     {
         if($date)
@@ -67,7 +82,6 @@ class Sprint extends Model {
 
     /**
      * A sprint has many issues
-     * @return type
      */
     public function issues()
     {
@@ -85,6 +99,7 @@ class Sprint extends Model {
 
     /**
      * Returns if a sprint in a project is complete
+     * @return  boolean
      */
     public function isComplete()
     {

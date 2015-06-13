@@ -5,15 +5,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Issue extends Model {
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'title',
-        'description',
-        'deadline',
-        'project_id',
-        'user_id',
-        'type_id',
-        'status_id',
-        'sprint_id',
+    'title',
+    'description',
+    'deadline',
+    'project_id',
+    'user_id',
+    'type_id',
+    'status_id',
+    'sprint_id',
     ];
 
     protected $dates = ['deadline'];
@@ -38,9 +43,8 @@ class Issue extends Model {
         }
     }
 
-    /**,
+    /**
      * An issue belongs to a project
-     * @return type
      */
     public function project()
     {
@@ -57,8 +61,7 @@ class Issue extends Model {
     }
 
     /**
-     * An issue belongs to a user
-     * @return type
+     * An issue has one issue type
      */
     public function issueType()
     {
@@ -67,7 +70,6 @@ class Issue extends Model {
 
     /**
      * An issue has one sprint
-     * @return type
      */
     public function sprint()
     {
@@ -76,7 +78,6 @@ class Issue extends Model {
 
     /**
      * An issue status belongs to an issue
-     * @return type
      */
     public function issueStatus()
     {

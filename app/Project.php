@@ -6,6 +6,11 @@ use Carbon\Carbon;
 use DB;
 class Project extends Model {
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'slug',
@@ -52,6 +57,11 @@ class Project extends Model {
         return $this->hasMany('App\Issue');
     }
 
+    /**
+     * Get issues that are active (not archived)
+     * @return  collection
+     */
+
     public function getActiveIssues()
     {
         $archiveStatusId = IssueStatus::getIdByMachineName('archive');
@@ -67,8 +77,8 @@ class Project extends Model {
     }
 
     /**
-     * Get the list of sprints from a project
-     * @return mixed
+     * Get the list of sprints from a project that are not complete
+     * @return collection $sprints
      */
     public function getSprints()
     {
@@ -79,9 +89,9 @@ class Project extends Model {
     }
 
     /**
-     * Get the issues corresponding to a given sprint
-     * @param $sprintId
-     * @return mixed
+     * Get the collection of issues corresponding to a given sprint - that are not archived
+     * @param integer $sprintId
+     * @return collection
      */
     public function getIssuesFromSprint($sprintId)
     {
@@ -91,7 +101,11 @@ class Project extends Model {
             ->where('sprint_id', '=', (int) $sprintId)->get();
     }
 
-    /** When a new project is created, create a sprint named backlog by default */
+    /**
+     * createBacklogSprint when a new project is created, 
+     * create a sprint named backlog by default and set its status to inactive
+     * @param  int $projectId
+     */
     public function createBacklogSprint($projectId)
     {
         if($projectId)
@@ -108,13 +122,19 @@ class Project extends Model {
 
     /**
      * Get the active sprint for a given project
-     * @return mixed
+     * @return first sprint from collection
      */
     public function getActiveSprint()
     {
-        return $this->sprints()->where('status_id', '=', SprintStatus::getIdByMachineName('active'))->get()->first();
+        return $this->sprints()
+                ->where('status_id', '=', SprintStatus::getIdByMachineName('active'))
+                ->get()->first();
     }
 
+    /**
+     * getBacklogSprint Get the backlog sprint for a project
+     * @return backlog sprint from collection
+     */
     public function getBacklogSprint()
     {
         return $this->sprints()->where('machine_name', '=', 'backlog')->get()->first();
