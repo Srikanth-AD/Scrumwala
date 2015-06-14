@@ -15,21 +15,23 @@ use App\IssueType;
 use App\IssueStatus;
 use DB;
 use Session;
+
 class IssuesController extends Controller {
 
 	public function __construct()
 	{
 		$this->middleware('auth');
 	}
+
 	/**
-	 * Display a listing of the resource.
+	 * Return a view with issueCount and issues collection
 	 *
 	 * @return Response
 	 */
 	public function index()
 	{
 		$issuesCount = Issue::latest()->get()->count();
-        $issues = DB::table('issues')->orderBy('created_at', 'desc')->paginate(15);
+		$issues = DB::table('issues')->orderBy('created_at', 'desc')->paginate(15);
 
 		$issues->each(function($issue)
 		{
@@ -48,7 +50,7 @@ class IssuesController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the form for creating a new issue
 	 *
 	 * @return Response
 	 */
@@ -62,44 +64,50 @@ class IssuesController extends Controller {
 		return view('issues.create')->with([
 			'projectNames' => $projectNames,
 			'issueTypeLabels' => $issueTypeLabels,
-		]);
+			]);
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Store a newly created issue in storage. 
+	 * Redirect to the corresponding project's work view
 	 *
 	 * @return Response
 	 */
 	public function store(IssueRequest $request)
 	{		
 		$todoIssueStatusId = IssueStatus::getIdByMachineName('todo');
+		
 		$request['user_id'] = Auth::user()->id;
-		$issue = new Issue;
-		$request['sprint_id'] = Project::find($request->project_id)->getBacklogSprint()->id;
+		$request['sprint_id'] = Project::findOrFail($request->project_id)->getBacklogSprint()->id;
 		$request['status_id'] = $todoIssueStatusId;
+		
+		$issue = new Issue;
 		$issue->create($request->all());
+
 		return redirect('projects/' . $request->project_id);
 	}
 
 	/**
-	 * [quickAdd Add an issue from project plan view - inline form ]
-	 * @param  IssueRequest $request [description]
-	 * @return [type]                [description]
+	 * quickAdd Add an issue from project plan view - inline form
+	 * @param  IssueRequest $request
+	 * @return Response
 	 */
 	public function quickAdd(IssueRequest $request)
 	{
 		$todoIssueStatusId = IssueStatus::getIdByMachineName('todo');
-		$request['user_id'] = Auth::user()->id;
 		$issue = new Issue;
-		$request['sprint_id'] = Project::find($request->project_id)->getBacklogSprint()->id;
+		
+		$request['user_id'] = Auth::user()->id;
+		$request['sprint_id'] = Project::findOrFail($request->project_id)->getBacklogSprint()->id;
 		$request['status_id'] = $todoIssueStatusId;
+		
 		$issue->create($request->all());
+		
 		return Redirect::back();
-
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Return a view to display an issue's details
 	 *
 	 * @return Response
 	 */
@@ -109,30 +117,33 @@ class IssuesController extends Controller {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
+	 * Return a view for editing an issue's details
 	 *
 	 * @return Response
 	 */
 	public function edit(Issue $issue)
 	{
 		$projectNames = Project::lists('name', 'id')->all();
+
 		$issueTypeLabels = IssueType::lists('label','id')->all();
 		krsort($issueTypeLabels);
+		
 		$issueStatusLabels = IssueStatus::lists('label','id')->all();
 		krsort($issueStatusLabels);
+		
 		$deadline = ($issue->deadline) ? $issue->deadline->format('Y-m-d') : null;
 
 		return view('issues.edit')->with(
 			['issue' => $issue,
-				'projectNames' => $projectNames,
-				'issueTypeLabels' => $issueTypeLabels,
-				'issueStatusLabels' => $issueStatusLabels,
-				'deadline' => $deadline
+			'projectNames' => $projectNames,
+			'issueTypeLabels' => $issueTypeLabels,
+			'issueStatusLabels' => $issueStatusLabels,
+			'deadline' => $deadline
 			]);
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Update an issue in storage.
 	 *
 	 * @return Response
 	 */
@@ -143,12 +154,16 @@ class IssuesController extends Controller {
 		return redirect('projects/' . $issue->project_id);
 	}
 
+	/**
+	 * Return a view to display issue search results for a given query
+	 */
+
 	public function search(IssueSearchRequest $request)
 	{
 		$query = trim(strip_tags($request->get('query')));
 		$issues = Issue::where('title', 'LIKE', "%$query%")->get();
 
-        $issues->each(function($issue)
+		$issues->each(function($issue)
 		{
 			$issue->id = (int) $issue->id;
 			$issue->projectName = Project::find($issue->project_id)->name;
@@ -159,10 +174,10 @@ class IssuesController extends Controller {
 			unset($issue->type_id);
 		});
 
-        return view('issues.searchresults')->with([
+		return view('issues.searchresults')->with([
 			'issues' => $issues,
 			'query' => $query
-		]);
+			]);
 	}
 
 	/**
@@ -212,22 +227,11 @@ class IssuesController extends Controller {
 		if(in_array($machineNameOfNewSprint, $sprintMachineNames))
 		{
 			$sprintId = (int) Sprint::where('machine_name', '=', $machineNameOfNewSprint)
-								->where('project_id', '=', $projectId)->first()->id;
+			->where('project_id', '=', $projectId)->first()->id;
 			DB::update('update issues set sprint_id = ? where id = ?', [$sprintId, $issueId]);
 			$result = "Issue's sprint association has been updated successfully.";
 		}
 		return $result;
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
 	}
 
 }

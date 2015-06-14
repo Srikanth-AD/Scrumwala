@@ -5,13 +5,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\SprintRequest;
 use Illuminate\Support\Facades\Redirect;
-//use Request;
 use App\Sprint;
 use App\Project;
 use App\SprintStatus;
 use DB;
 use Session;
 use Log;
+
 class SprintsController extends Controller {
 
     public function __construct()
@@ -19,30 +19,10 @@ class SprintsController extends Controller {
         $this->middleware('auth');
     }
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
     /**
      * Add a sprint from the Project - Plan page
      */
-	public function add(SprintRequest $request)
+    public function add(SprintRequest $request)
     {
         if($request->name && $request->project_id)
         {
@@ -52,9 +32,11 @@ class SprintsController extends Controller {
                 'status_id' => SprintStatus::getIdByMachineName('inactive'),
                 'project_id' => (int) $request->project_id,
                 'sort_order' => (int) DB::table('sprints')->where('project_id', '=', $request->project_id)->max('sort_order') + 1
-            ]);
+                ]);
         }
+
         Session::flash('sprintadded', $request->name);
+        
         return Redirect::back();
     }
 
@@ -67,7 +49,7 @@ class SprintsController extends Controller {
             'name' => 'required|min:3|max:100',
             'from_date' => 'required|date',
             'to_date' => 'required|date'
-        ]);
+            ]);
 
         $sprintName = $request->name;
         $sprintMachineName = $request->machine_name;
@@ -76,6 +58,7 @@ class SprintsController extends Controller {
         $to_date = $request->to_date;
 
         // @todo refactor to a DB transaction
+
         // Deactivate current sprint in project
         $activeSprintInProject = Project::findOrFail($projectId)->getActiveSprint();
         if($activeSprintInProject)
@@ -87,11 +70,11 @@ class SprintsController extends Controller {
         // Activate new sprint
         if($sprintMachineName)
         {
-
             $sprint = Sprint::where('machine_name', '=', $sprintMachineName)
-                ->where('machine_name', '!=', 'backlog')
-                ->where('project_id', '=', $projectId)
-                ->firstOrFail();
+            ->where('machine_name', '!=', 'backlog')
+            ->where('project_id', '=', $projectId)
+            ->firstOrFail();
+
             if($sprint)
             {
                 $sprint->name = $sprintName;
@@ -103,95 +86,42 @@ class SprintsController extends Controller {
                 // @todo flash message
             }
         }
+
         return Redirect::back();
     }
 
     /**
      * Set the status of a sprint to complete, if all issues in this sprint are complete
      * @param  Request
-     * @return [type]
+     * @return array $result
      */
     public function complete(Request $request)
     {
         // default
     	$result = array('message' => 'There was an error processing this request', 
-    					'status' => 0);
+           'status' => 0);
 
     	$sprintName = $request->sprintMachineName;
         $projectId = $request->projectId;
-    	$sprint = Sprint::where('machine_name', '=', $sprintName)
-                    ->where('project_id', '=', $projectId)
-                    ->firstOrFail();
+        $sprint = Sprint::where('machine_name', '=', $sprintName)
+        ->where('project_id', '=', $projectId)
+        ->firstOrFail();
 
-    	if($sprint && $sprint->isComplete())
-    	{
-    		$sprint->status_id = SprintStatus::getIdByMachineName('complete');
-    		$sprint->save();
+        if($sprint && $sprint->isComplete())
+        {
+          $sprint->status_id = SprintStatus::getIdByMachineName('complete');
+          $sprint->save();
 
-            $result = array('message' => 'This sprint has been set to complete',
-                        'sprintMachineName' => $sprintName,
-                        'status' => 1);
-    	} else {
+          $result = array('message' => 'This sprint has been set to complete',
+            'sprintMachineName' => $sprintName,
+            'status' => 1);
+        } 
+        else {
             $result = array('message' => 'All issues in the sprint should be complete or archived before setting a sprint to complete',
-                        'sprintMachineName' => $sprintName,
-                        'status' => 0);
+                'sprintMachineName' => $sprintName,
+                'status' => 0);
         }
-    	
-    	return $result;
+        return $result;
     }
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
 
 }

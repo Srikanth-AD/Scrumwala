@@ -22,7 +22,7 @@ class IssueSearchRequest extends Request {
     public function rules()
     {
         return [
-            'query' => 'required|min:3',
+        'query' => 'required|min:3',
         ];
     }
 

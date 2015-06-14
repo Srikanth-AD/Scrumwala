@@ -22,10 +22,10 @@ class ProjectRequest extends Request {
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:100',
-            'slug' => 'required|alpha_dash|min:4|max:50',
-            'issue_prefix' => 'required|alpha|min:3|max:10',
-            'deadline' => 'sometimes|date_format:Y-m-d',
+        'name' => 'required|min:3|max:100',
+        'slug' => 'required|alpha_dash|min:4|max:50',
+        'issue_prefix' => 'required|alpha|min:3|max:10',
+        'deadline' => 'sometimes|date_format:Y-m-d',
         ];
     }
 
