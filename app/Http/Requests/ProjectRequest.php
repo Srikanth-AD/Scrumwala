@@ -1,8 +1,10 @@
 <?php namespace App\Http\Requests;
+
 use App\Project;
 use App\Http\Requests\Request;
 
-class ProjectRequest extends Request {
+class ProjectRequest extends Request
+{
 
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +24,10 @@ class ProjectRequest extends Request {
     public function rules()
     {
         return [
-        'name' => 'required|min:3|max:100',
-        'slug' => 'required|alpha_dash|min:4|max:50',
-        'issue_prefix' => 'required|alpha|min:3|max:10',
-        'deadline' => 'sometimes|date_format:Y-m-d',
+            'name' => 'required|min:3|max:100|unique:projects',
+            'slug' => 'required|alpha_dash|min:4|max:50|unique:projects',
+            'issue_prefix' => 'required|alpha|min:3|max:10|unique:projects',
+            'deadline' => 'sometimes|date_format:Y-m-d',
         ];
     }
 
