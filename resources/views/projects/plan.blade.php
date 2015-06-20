@@ -36,15 +36,15 @@
                 <div class=" col-md-3">
                     <h5 class="group-heading">Actions</h5>
                     <div class="btn-group" role="group">
-                        <button id="action-add-sprint" type="button" class="btn btn-default">
-                            <img alt="add sprint" width="18" height="18"
-                                 src="{{asset('css/icons/ic_add_black_36dp.png')}}" />
-                            Add Sprint
-                        </button>
                         <button id="action-add-issue" type="button" class="btn btn-default">
                             <img alt="add issue" width="18" height="18"
                                  src="{{asset('css/icons/ic_add_black_36dp.png')}}" />
                             Add Issue
+                        </button>
+                        <button id="action-add-sprint" type="button" class="btn btn-default">
+                            <img alt="add sprint" width="18" height="18"
+                                 src="{{asset('css/icons/ic_add_black_36dp.png')}}" />
+                            Add Sprint
                         </button>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                    </div>                    
+                    </div>
                 </div>
                 <div class="col-md-12" id="action-add-issue-body">
                     <div class="col-md-8">
@@ -70,13 +70,13 @@
             <div class="col-md-12 project-plan main-content">
                 <div class="container-fluid col-md-10">
                     @foreach(App\Project::find($project->id)->getSprints() as $sprint)
-                        <div class="row sprint-header" 
+                        <div class="row sprint-header"
                             data-machine-name="{{$sprint->machine_name}}">
                             <div class="col-md-4">
-                                
-                                <h3 class="sprint-name" 
+
+                                <h3 class="sprint-name"
                                     data-machine-name="{{$sprint->machine_name}}">
-                                    <img class="toggle" width="18" height="18" 
+                                    <img class="toggle" width="18" height="18"
                                     src="{{asset('css/icons/ic_keyboard_arrow_right_black_36dp.png')}}" />
                                     {{$sprint->name}}
                                     <span class="grey issue-count">
@@ -111,7 +111,7 @@
                         @endif
                         @if($sprint->status_id == App\SprintStatus::getIdByMachineName('active'))
                             <button data-status="0" data-id="{{$sprint->machine_name}}"
-                                    data-project-id="{{$project->id}}" 
+                                    data-project-id="{{$project->id}}"
                                     class="btn btn-default btn-sm sprint-complete"
                                     type="submit">Complete
                             </button>
