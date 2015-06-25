@@ -209,6 +209,16 @@ class IssuesController extends Controller {
 			if (Issue::find($issueId) != NULL) {
 				DB::update('update issues set status_id = ? where id = ?', [$statusId, $issueId]);
 				$result = 'Issue status has been changed successfully.';
+
+				// If an issue is archived set sort order (previous and next) to NULL
+				if ($newIssueStatusMachineName == 'archive') {
+
+					// set sort_prev and sort_next to NULL
+					$archivedIssue = Issue::findOrFail($issueId);
+					$archivedIssue->sort_prev = NULL;
+					$archivedIssue->sort_next = NULL;
+					$archivedIssue->save();
+				}
 			}
 		}
 		return $result;
@@ -222,7 +232,7 @@ class IssuesController extends Controller {
 		$result = "There was an error updating the issue's sprint association";
 		$issueId = (int) trim(Request::get('issueId'));
 		$projectId = (int) trim(Request::get('projectId'));
-		$issue = Issue::find($issueId);
+		$issue = Issue::findOrFail($issueId);
 		$machineNameOfNewSprint = trim(strip_tags(Request::get('machineNameOfNewSprint')));
 
 		$sprints = Project::find($issue->project_id)->getSprints();
