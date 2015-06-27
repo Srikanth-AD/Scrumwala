@@ -3,13 +3,11 @@
 <div class="row container-fluid">
     <div class="col-md-4">
         <h5 class="group-heading">Navigate</h5>
-        <button type="button" class="btn btn-default">
-            <a href="/projects/{{$project->id}}/plan">
-                <img width="18" height="18" alt="navigate to plan mode"
-                     src="{{asset('css/icons/ic_arrow_back_grey600_36dp.png')}}" />
-                Plan
-            </a>
-        </button>
+        <a href="/projects/{{$project->id}}/plan"  class="btn btn-default">
+            <img width="18" height="18" alt="navigate to plan mode"
+                 src="{{asset('css/icons/ic_arrow_back_grey600_36dp.png')}}" />
+            Plan
+        </a>
     </div>
     <div class="col-md-4">
         @if($sprint)
