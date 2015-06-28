@@ -200,24 +200,60 @@ class IssuesController extends Controller {
 	public function statuschange() {
 		$result = 'There was an error updating the issue status';
 		$issueStatusMachineNames = IssueStatus::lists('machine_name', 'id')->all();
-		$newIssueStatusMachineName = trim(Request::get('machineNameOfNewIssueStatus'));
+		$newIssueStatusMachineName = trim(strip_tags(Request::get('machineNameOfNewIssueStatus')));
+
+		$prevIssueId = trim(strip_tags(Request::get('prevIssueId')));
+		$nextIssueId = trim(strip_tags(Request::get('nextIssueId')));
 
 		if (in_array($newIssueStatusMachineName, $issueStatusMachineNames)) {
 			$issueId = (int) trim(Request::get('issueId'));
 			$statusId = array_search($newIssueStatusMachineName, $issueStatusMachineNames);
 
-			if (Issue::find($issueId) != NULL) {
+			$issue = Issue::findOrFail($issueId);
+			if ($issue) {
 				DB::update('update issues set status_id = ? where id = ?', [$statusId, $issueId]);
 				$result = 'Issue status has been changed successfully.';
 
 				// If an issue is archived set sort order (previous and next) to NULL
 				if ($newIssueStatusMachineName == 'archive') {
 
-					// set sort_prev and sort_next to NULL
+					// Check if previous and next issue ids provided in the Request exist in the sprint
+					if ($prevIssueId &&
+						Sprint::find($issue->sprint_id)->issues()
+						->where('id', '=', $issue->id)->first()->id) {
+						// do nothing
+					} else {
+						$prevIssueId = NULL;
+					}
+
+					if ($nextIssueId &&
+						Sprint::find($issue->sprint_id)->issues()
+						->where('id', '=', $issue->id)->first()->id) {
+						// do nothing
+					} else {
+						$nextIssueId = NULL;
+					}
+
+					$prevIssue = Issue::findOrFail($prevIssueId);
+					$nextIssue = Issue::findOrFail($nextIssueId);
+
+					// set sort order for previous and next issues in the same sprint
+					if ($prevIssue) {
+						$prevIssue->sort_next = $issue->sort_next ? $issue->sort_next : NULL;
+						$prevIssue->save();
+					}
+
+					if ($nextIssue) {
+						$nextIssue->sort_prev = $issue->sort_prev ? $issue->sort_prev : NULL;
+						$nextIssue->save();
+					}
+
+					// set sort_prev and sort_next for archived issue to NULL
 					$archivedIssue = Issue::findOrFail($issueId);
 					$archivedIssue->sort_prev = NULL;
 					$archivedIssue->sort_next = NULL;
 					$archivedIssue->save();
+
 				}
 			}
 		}
@@ -233,9 +269,12 @@ class IssuesController extends Controller {
 		$issueId = (int) trim(Request::get('issueId'));
 		$projectId = (int) trim(Request::get('projectId'));
 		$issue = Issue::findOrFail($issueId);
+		$currentSprintIdOfIssue = $issue->sprint_id;
 		$machineNameOfNewSprint = trim(strip_tags(Request::get('machineNameOfNewSprint')));
+		$nextIssueIdInNewSprint = trim(strip_tags(Request::get('nextIssueId')));
+		$prevIssueIdInNewSprint = trim(strip_tags(Request::get('prevIssueId')));
 
-		$sprints = Project::find($issue->project_id)->getSprints();
+		$sprints = Project::findOrFail($issue->project_id)->getSprints();
 
 		$sprintMachineNames = [];
 		foreach ($sprints as $sprint) {
@@ -243,9 +282,50 @@ class IssuesController extends Controller {
 		}
 
 		if (in_array($machineNameOfNewSprint, $sprintMachineNames)) {
-			$sprintId = (int) Sprint::where('machine_name', '=', $machineNameOfNewSprint)
+			$newSprintId = (int) Sprint::where('machine_name', '=', $machineNameOfNewSprint)
 				->where('project_id', '=', $projectId)->first()->id;
-			DB::update('update issues set sprint_id = ? where id = ?', [$sprintId, $issueId]);
+
+			// update sort order for previous and next issues in current sprint (association)
+			$prevIssue = Sprint::findOrFail($currentSprintIdOfIssue)->getPreviousIssueBySortOrder($issueId);
+			$nextIssue = Sprint::findOrFail($currentSprintIdOfIssue)->getNextIssueBySortOrder($issueId);
+
+			if ($prevIssue) {
+				$prevIssue->sort_next = $issue->sort_next ? $issue->sort_next : NULL;
+				$prevIssue->save();
+			}
+
+			if ($nextIssue) {
+				$nextIssue->sort_prev = $issue->sort_prev ? $issue->sort_prev : NULL;
+				$nextIssue->save();
+			}
+
+			// Check if previous and next issue ids provided in the Request exist in the new sprint
+			if ($prevIssueIdInNewSprint &&
+				Sprint::find($newSprintId)->issues()
+				->where('id', '=', $prevIssueIdInNewSprint)->first()->id) {
+				// update sort order for previous issue in new sprint
+				$prevIssueInNewSprint = Issue::findOrFail($prevIssueIdInNewSprint);
+				$prevIssueInNewSprint->sort_next = $issueId;
+				$prevIssueInNewSprint->save();
+			} else {
+				$prevIssueIdInNewSprint = NULL;
+			}
+
+			if ($nextIssueIdInNewSprint &&
+				Sprint::find($newSprintId)->issues()
+				->where('id', '=', $nextIssueIdInNewSprint)->first()->id) {
+				// update sort order for next issue in new sprint
+				$nextIssueInNewSprint = Issue::findOrFail($nextIssueIdInNewSprint);
+				$nextIssueInNewSprint->sort_prev = $issueId;
+				$nextIssueInNewSprint->save();
+			} else {
+				$nextIssueIdInNewSprint = NULL;
+			}
+
+			// Update sprint association and sort previous and next for issue
+			DB::update('update issues set sprint_id = ?, sort_prev = ?, sort_next = ? where id = ?',
+				[$newSprintId, $prevIssueIdInNewSprint, $nextIssueIdInNewSprint, $issueId]);
+
 			$result = "Issue's sprint association has been updated successfully.";
 		}
 		return $result;

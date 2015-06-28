@@ -15,7 +15,7 @@
             var draggedToListId = ui.item[0].parentElement.id;
             var issueId = $(ui.item[0]).attr('data-id');
             var projectId = $('#project-name').attr('data-id');
-            
+
             if(draggedFromListId !== draggedToListId)
             {
                 $.ajax({
@@ -26,10 +26,12 @@
                         'issueId': issueId,
                         'machineNameOfNewSprint':draggedToListId,
                         'projectId':projectId,
+                        'nextIssueId': $('li[data-id=' + issueId + ']').next().attr('data-id'),
+                        'prevIssueId': $('li[data-id=' + issueId + ']').prev().attr('data-id'),
                         '_token': "{{ csrf_token() }}"
                     },
                     success: function(result) {
-                        // Update issue counts for sprints - dragged from & to
+                        // Update issue counts for sprints - dragged from and to
                         $('.sprint-name[data-machine-name=' + draggedFromListId + '] > span.issue-count')
                                 .text('(' + $('#' + draggedFromListId + ' li').length + ')');
                         $('.sprint-name[data-machine-name=' + draggedToListId + '] > span.issue-count')
@@ -72,6 +74,8 @@
                     data: {
                         'issueId': issueId,
                         'machineNameOfNewIssueStatus':'archive',
+                        'nextIssueId': $('li[data-id=' + issueId + ']').next().attr('data-id'),
+                        'prevIssueId': $('li[data-id=' + issueId + ']').prev().attr('data-id'),
                         '_token': "{{ csrf_token() }}"
                     },
                     success: function(result) {
@@ -98,21 +102,21 @@
                         $('#' + result.sprintMachineName).fadeOut(4000);
                         $('.sprint-complete').fadeOut(4000);
                         $('.sprint-header[data-machine-name=' + result.sprintMachineName + ']').fadeOut(4000);
-                    } 
+                    }
                     else {
                         //
                     }
                     $('body').append('<div title="Please Note" id="sprint-complete-request-message">' + result.message + '</div>');
                     $(function() {
                         $("#sprint-complete-request-message").dialog();
-                      });                    
+                      });
                 }
             });
         });
 
-        
+
         // Toggle: show/hide sprint
-        $(".toggle").on("click", function() { 
+        $(".toggle").on("click", function() {
           var listId = $(this).parent('h3').attr('data-machine-name');
           $("#" + listId).slideToggle();
         });

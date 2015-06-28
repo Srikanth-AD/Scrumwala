@@ -126,4 +126,22 @@ class Sprint extends Model {
 		            ->first();
 	}
 
+	/**
+	 * getPreviousIssueBySortOrder get previous issue from sprint by sort order
+	 * @param  int $issueId Issue Id
+	 * @return
+	 */
+	public function getPreviousIssueBySortOrder($issueId) {
+		return $this->issues()->where('sort_next', '=', $issueId)->first();
+	}
+
+	/**
+	 * getNextIssueBySortOrder get next issue from sprint by sort order
+	 * @param  int $issueId Issue Id
+	 * @return
+	 */
+	public function getNextIssueBySortOrder($issueId) {
+		return $this->issues()->where('sort_prev', '=', $issueId)->first();
+	}
+
 }
