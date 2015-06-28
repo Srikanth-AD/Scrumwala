@@ -24,12 +24,10 @@
             <div class="actions">
                 <div class="col-md-4">
                     <h5 class="group-heading">Navigate</h5>
-                    <button type="button" class="btn btn-default">
-                        <a href="/projects/{{$project->id}}">
-                            Work <img width="18" height="18" alt="navigate to work mode"
-                                 src="{{asset('css/icons/ic_arrow_forward_grey600_36dp.png')}}" />
-                        </a>
-                    </button>
+                    <a href="/projects/{{$project->id}}" class="btn btn-default">
+                        Work <img width="18" height="18" alt="navigate to work mode"
+                             src="{{asset('css/icons/ic_arrow_forward_grey600_36dp.png')}}" />
+                    </a>
                 </div>
                 <div class="col-md-3">
                 </div>
