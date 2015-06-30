@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', function() {
+Route::get('/', function () {
 	return redirect('auth/login');
 });
 
@@ -13,6 +13,7 @@ Route::get('issues/search', 'IssuesController@search');
 Route::post('issues/statuschange', 'IssuesController@statuschange');
 Route::post('issues/sprintchange', 'IssuesController@sprintchange');
 Route::post('issues/quickAdd', 'IssuesController@quickAdd');
+Route::post('issues/sortorder', 'IssuesController@sortorder');
 Route::resource('issues', 'IssuesController');
 Route::resource('issuestatuses', 'IssueStatusesController');
 
@@ -26,4 +27,4 @@ Route::resource('sprints', 'SprintsController');
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
-	]);
+]);

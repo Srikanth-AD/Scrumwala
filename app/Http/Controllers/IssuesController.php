@@ -234,16 +234,15 @@ class IssuesController extends Controller {
 						$nextIssueId = NULL;
 					}
 
-					$prevIssue = Issue::findOrFail($prevIssueId);
-					$nextIssue = Issue::findOrFail($nextIssueId);
-
 					// set sort order for previous and next issues in the same sprint
-					if ($prevIssue) {
+					if ($prevIssueId) {
+						$prevIssue = Issue::findOrFail($prevIssueId);
 						$prevIssue->sort_next = $issue->sort_next ? $issue->sort_next : NULL;
 						$prevIssue->save();
 					}
 
-					if ($nextIssue) {
+					if ($nextIssueId) {
+						$nextIssue = Issue::findOrFail($nextIssueId);
 						$nextIssue->sort_prev = $issue->sort_prev ? $issue->sort_prev : NULL;
 						$nextIssue->save();
 					}
@@ -328,6 +327,67 @@ class IssuesController extends Controller {
 
 			$result = "Issue's sprint association has been updated successfully.";
 		}
+		return $result;
+	}
+
+	/**
+	 * sortorder Set sort order (sort_prev and sort_next) for an issue when its dragged and dropped into
+	 * the same sprint
+	 * @return $result array
+	 */
+	public function sortorder() {
+		$result = "There was an error updating the issue's sort order";
+		$issueId = (int) trim(Request::get('issueId'));
+		$projectId = (int) trim(Request::get('projectId'));
+
+		if (Request::get('newPrevIssueId')) {
+			$newPrevIssueIdInSprint = trim(strip_tags(Request::get('newPrevIssueId')));
+		} else {
+			$newPrevIssueIdInSprint = NULL;
+		}
+
+		if (Request::get('newNextIssueId')) {
+			$newNextIssueIdInSprint = trim(strip_tags(Request::get('newNextIssueId')));
+		} else {
+			$newNextIssueIdInSprint = NULL;
+		}
+
+		// @todo check if the above prev. and next issues are actually in the same sprint as issue
+
+		$issue = Issue::findOrFail($issueId);
+
+		// Update sort order for current previous and next issues in the sprint
+		$currentPrevIssue = Sprint::findOrFail($issue->sprint_id)->getPreviousIssueBySortOrder($issueId);
+		$currentNextIssue = Sprint::findOrFail($issue->sprint_id)->getNextIssueBySortOrder($issueId);
+
+		if ($currentPrevIssue) {
+			$currentPrevIssue->sort_next = $issue->sort_next ? $issue->sort_next : NULL;
+			$currentPrevIssue->save();
+		}
+
+		if ($currentNextIssue) {
+			$currentNextIssue->sort_prev = $issue->sort_prev ? $issue->sort_prev : NULL;
+			$currentNextIssue->save();
+		}
+
+		// Update sort order for new previous and next issues in the sprint
+		if ($newPrevIssueIdInSprint) {
+			$newPrevIssue = Issue::findOrFail($newPrevIssueIdInSprint);
+			$newPrevIssue->sort_next = $issueId;
+			$newPrevIssue->save();
+		}
+
+		if ($newNextIssueIdInSprint) {
+			$newNextIssue = Issue::findOrFail($newNextIssueIdInSprint);
+			$newNextIssue->sort_prev = $issueId;
+			$newNextIssue->save();
+		}
+
+		// Update sort previous and next for issue
+		DB::update('update issues set sort_prev = ?, sort_next = ? where id = ?',
+			[$newPrevIssueIdInSprint, $newNextIssueIdInSprint, $issueId]);
+
+		$result = "Issue's sort order has been updated successfully.";
 		return $result;
 	}
 
