@@ -30,6 +30,7 @@ class IssuesDeadlineReminder extends Command {
     {
         $currentTimestamp = Carbon::now()->toDateTimeString();
         $tomorrowTimestamp = Carbon::now()->addDay()->toDateTimeString();
+
         $issuesWithDeadlineWithinADay =
             DB::table('issues')
             ->select('id','deadline','title')
@@ -38,15 +39,18 @@ class IssuesDeadlineReminder extends Command {
             ->where('status_id', '!=', IssueStatus::getIdByMachineName('complete'))
             ->where('status_id', '!=', IssueStatus::getIdByMachineName('archive'))
             ->get();
-
-        Mail::send('emails.issuesDeadlineReminder',
-            ['issuesWithDeadlineWithinADay' => $issuesWithDeadlineWithinADay],
-            function($message)
-        {
-            $message->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'));
-            $message->to('adsrikanth@gmail.com', 'Srikanth AD')
-                ->subject('Daily report: issues with deadlines within a day');
-        });
+         
+         if($issuesWithDeadlineWithinADay)
+         {
+            Mail::send('emails.issuesDeadlineReminder',
+                ['issuesWithDeadlineWithinADay' => $issuesWithDeadlineWithinADay],
+                function($message) use($count)
+            {
+                $message->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'));
+                $message->to('adsrikanth@gmail.com', 'Srikanth AD')
+                    ->subject('Daily report: ' . count($issuesWithDeadlineWithinADay) .
+                            ' issues with deadlines within a day');
+            });
+         }
     }
-
 }
