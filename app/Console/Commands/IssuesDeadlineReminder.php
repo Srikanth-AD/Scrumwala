@@ -44,10 +44,10 @@ class IssuesDeadlineReminder extends Command {
          {
             Mail::send('emails.issuesDeadlineReminder',
                 ['issuesWithDeadlineWithinADay' => $issuesWithDeadlineWithinADay],
-                function($message) use($count)
+                function($message) use($issuesWithDeadlineWithinADay)
             {
                 $message->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'));
-                $message->to('adsrikanth@gmail.com', 'Srikanth AD')
+                $message->to(env('MAIL_TO_ADDRESS'), env('MAIL_TO_NAME'))
                     ->subject('Daily report: ' . count($issuesWithDeadlineWithinADay) .
                             ' issues with deadlines within a day');
             });
