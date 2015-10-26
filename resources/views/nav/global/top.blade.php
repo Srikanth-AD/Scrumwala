@@ -16,19 +16,33 @@
 				<ul class="nav navbar-nav navbar-left">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"
-						   role="button" aria-expanded="false">Project <span class="caret"></span></a>
+						   role="button" aria-expanded="false">Projects <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="{{ url('/projects') }}">List</a></li>
-							<li><a href="{{ url('/projects/create') }}">Create</a></li>
+							@foreach(App\Project::all() as $project)
+								<li><a href="{{ url('/projects/' . $project->id) }}">{{$project->name}}</a></li>
+							@endforeach
+							<li role="separator" class="divider"></li>
+				            <li><a href="{{ url('/projects/create') }}">Create a Project</a></li>
 						</ul>
 					</li>
 					@if(App\Project::all()->count() > 0)
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"
-							   role="button" aria-expanded="false">Issue <span class="caret"></span></a>
+							   role="button" aria-expanded="false">Issues <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ url('/issues') }}">List</a></li>
-								<li><a href="{{ url('/issues/create') }}">Create</a></li>
+								<li>
+									<a href="#">Most Recent</a>
+								</li>
+								<li role="separator" class="divider"></li>
+								@foreach(\DB::table('issues')->orderBy('created_at','desc')->take(3)->get() as $issue)
+									<li>
+										<a href="{{ url('/issues/' . $issue->id) }}">
+											{{substr($issue->title, 0, 20)}}..
+										</a>
+									</li>
+								@endforeach
+								<li role="separator" class="divider"></li>
+								<li><a href="{{ url('/issues/create') }}">Create an Issue</a></li>
 							</ul>
 						</li>
 					@endif
