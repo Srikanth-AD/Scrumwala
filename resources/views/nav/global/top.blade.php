@@ -18,10 +18,13 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"
 						   role="button" aria-expanded="false">Projects <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							@foreach(App\Project::all() as $project)
+							<li><a href="#">Most Recent</a></li>
+							<li role="separator" class="divider"></li>
+							@foreach(\DB::table('projects')->orderBy('created_at','desc')->take(3)->get() as $project)
 								<li><a href="{{ url('/projects/' . $project->id) }}">{{$project->name}}</a></li>
 							@endforeach
 							<li role="separator" class="divider"></li>
+							<li><a href="{{ url('/projects') }}">Projects List</a></li>
 				            <li><a href="{{ url('/projects/create') }}">Create a Project</a></li>
 						</ul>
 					</li>
@@ -30,9 +33,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"
 							   role="button" aria-expanded="false">Issues <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li>
-									<a href="#">Most Recent</a>
-								</li>
+								<li><a href="#">Most Recent</a></li>
 								<li role="separator" class="divider"></li>
 								@foreach(\DB::table('issues')->orderBy('created_at','desc')->take(3)->get() as $issue)
 									<li>
@@ -42,6 +43,7 @@
 									</li>
 								@endforeach
 								<li role="separator" class="divider"></li>
+								<li><a href="{{ url('/issues') }}">Issues List</a></li>			
 								<li><a href="{{ url('/issues/create') }}">Create an Issue</a></li>
 							</ul>
 						</li>
