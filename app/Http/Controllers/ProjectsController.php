@@ -90,7 +90,7 @@ class ProjectsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function update(Project $project, ProjectRequest $request)
+	public function update(ProjectRequest $request, Project $project)
 	{
 		$project->update($request->all());
 		return redirect('projects');
