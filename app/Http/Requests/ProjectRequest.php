@@ -23,12 +23,29 @@ class ProjectRequest extends Request
      */
     public function rules()
     {
-        return [
-            'name' => 'required|min:3|max:100|unique:projects',
-            'slug' => 'required|alpha_dash|min:4|max:50|unique:projects',
-            'issue_prefix' => 'required|alpha|min:3|max:10|unique:projects',
-            'deadline' => 'sometimes|date_format:Y-m-d',
-        ];
+        switch ($this->method())
+        {
+            case 'POST':
+            {
+                return [
+                    'name' => 'required|min:3|max:100|unique:projects',
+                    'slug' => 'required|alpha_dash|min:4|max:50|unique:projects',
+                    'issue_prefix' => 'required|alpha|min:3|max:10|unique:projects',
+                    'deadline' => 'sometimes|date_format:Y-m-d'
+                ];
+            }
+
+            case 'PATCH':
+            {
+                $project = $this->projects;
+                return [
+                    'name' => 'required|min:3|max:100|unique:projects,name,'.$project->id.',id',
+                    'slug' => 'required|alpha_dash|min:4|max:50|unique:projects,slug,'.$project->id.',id',
+                    'issue_prefix' => 'required|alpha|min:3|max:10|unique:projects,issue_prefix,'.$project->id.',id',
+                    'deadline' => 'sometimes|date_format:Y-m-d'
+                ];
+            }
+        }
     }
 
 }
