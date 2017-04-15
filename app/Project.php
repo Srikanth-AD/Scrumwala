@@ -88,7 +88,10 @@ class Project extends Model {
 		$archiveStatusId = IssueStatus::getIdByMachineName('archive');
 		return $this->issues()
 		            ->where('status_id', '!=', (int) $archiveStatusId)
-		            ->where('sprint_id', '=', (int) $sprintId)->get();
+		            ->where('sprint_id', '=', (int) $sprintId)
+                        ->orderBy('priority_order')
+                        ->orderBy('id')
+                        ->get();
 	}
 
 	/**

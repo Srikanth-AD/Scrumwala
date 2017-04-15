@@ -4,3 +4,4 @@
 .idea/
 /storage/logs/*
 npm-debug.log
+/nbproject

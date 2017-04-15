@@ -14,6 +14,7 @@ Route::post('issues/statuschange', 'IssuesController@statuschange');
 Route::post('issues/sprintchange', 'IssuesController@sprintchange');
 Route::post('issues/quickAdd', 'IssuesController@quickAdd');
 Route::post('issues/sortorder', 'IssuesController@sortorder');
+Route::post('issues/priorityorder', 'IssuesController@sortOrderPriority');
 Route::resource('issues', 'IssuesController');
 Route::resource('issuestatuses', 'IssueStatusesController');
 

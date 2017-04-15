@@ -59,7 +59,7 @@
                 $.ajax({
                     type: "POST",
                     cache: false,
-                    url: "/issues/sortorder",
+                    url: "/issues/priorityorder",
                     data: {
                         'issueId':issueId,
                         'machineNameOfSprint':draggedToListId,
