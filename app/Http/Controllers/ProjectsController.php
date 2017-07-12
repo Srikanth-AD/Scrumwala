@@ -1,12 +1,10 @@
 <?php namespace App\Http\Controllers;
 use Auth;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
-use Carbon\Carbon;
 use App\Project;
+use App\IssueStatus;
 
 class ProjectsController extends Controller {
 
@@ -57,6 +55,7 @@ class ProjectsController extends Controller {
 	public function show(Project $project)
 	{
 		$activeSprint = $project->getActiveSprint();
+                $issueStatuses = IssueStatus::getBySortOrder();
 		if($activeSprint)
 		{
 			$issues = Project::find($project->id)->getIssuesFromSprint($activeSprint->id);
@@ -67,7 +66,8 @@ class ProjectsController extends Controller {
 		return view('projects.show')->with([
 			'project' => $project,
 			'issues' => $issues,
-			'sprint' => $activeSprint
+			'sprint' => $activeSprint,
+                        'issueStatuses' => $issueStatuses
 		]);
 
 	}

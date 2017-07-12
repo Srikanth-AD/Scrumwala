@@ -62,7 +62,7 @@ class Issue extends Model {
 	 * An issue has one issue type
 	 */
 	public function issueType() {
-		return $this->hasOne('App\IssueType');
+		return $this->hasOne('App\IssueType', 'id', 'type_id');
 	}
 
 	/**

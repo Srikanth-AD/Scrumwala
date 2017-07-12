@@ -11,8 +11,8 @@
             <div class="row">
                 <div class="col-md-offset-6 col-md-6">
                     <div class="btn-group pull-right">
-                        <span class="issue-type {{App\IssueType::findOrFail($issue->type_id)->machine_name}}">
-                            {{App\IssueType::findOrFail($issue->type_id)->label}}
+                        <span class="issue-type {{$issue->issueType->machine_name}}">
+                            {{$issue->issueType->label}}
                         </span>
                     </div>
                 </div>

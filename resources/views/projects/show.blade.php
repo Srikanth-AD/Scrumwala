@@ -16,9 +16,8 @@
     @if($project)
         @include('projects.show.header')
         <div class="row container-fluid project-work main-content">
-            @if(App\Project::findOrFail($project->id)->getActiveSprint())
+            @if($sprint)
                 @if(count($issues) > 0)
-                    <?php $issueStatuses = App\IssueStatus::getBySortOrder() ?>
                     @foreach($issueStatuses as $issueStatus)
                         <div class="col-sm-4">
                             <?php $list = App\Utils::getIssuesInSprintByIssueStatus($issueStatus->machine_name,$sprint->id) ?>
@@ -28,14 +27,14 @@
                             @include('projects.show.issues-list')
                         </div>
                     @endforeach
+                @else
+                    <h3>No issues found</h3>
+                    <p><a href="/issues/create">Create a new issue</a></p>
                 @endif
             @else
                 <p>No active sprint is set for this project.</p>
             @endif
-            @else
-                <h3>No issues found</h3>
-                <p><a href="/issues/create">Create a new issue</a></p>
-            @endif
         </div>
+    @endif
 @endsection
 @include('projects.show.js')
