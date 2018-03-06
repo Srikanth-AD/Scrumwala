@@ -4,6 +4,10 @@ Route::get('/', function () {
 	return redirect('auth/login');
 });
 
+Route::get('/home', function(){
+	return redirect('projects');
+});
+
 /* Projects */
 Route::get('projects/{projects}/plan', 'ProjectsController@plan');
 Route::resource('projects', 'ProjectsController');
