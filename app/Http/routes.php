@@ -25,6 +25,11 @@ Route::post('sprints/complete', 'SprintsController@complete');
 Route::resource('sprints', 'SprintsController');
 
 /* Auth */
+// disable registration to prevent unwanted access
+Route::post('auth/register', function () {
+    return 'Registration not possible';
+});
+// everything else can remain as is
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

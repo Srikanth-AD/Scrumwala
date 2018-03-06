@@ -8,7 +8,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">{{env('APP_NAME')}}</a>
+			<a class="navbar-brand" href="/">{{env('APP_NAME')}}</a>
 		</div>
 
 		@unless (Auth::guest())
@@ -56,7 +56,6 @@
 			<ul class="nav navbar-nav navbar-right">
 				@if (Auth::guest())
 					<li><a href="{{ url('/auth/login') }}">Login</a></li>
-					<li><a href="{{ url('/auth/register') }}">Register</a></li>
 				@else
 					@include('nav.global.search')
 					<li class="dropdown">
