@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model {
 
+	public static $projectTypes = ['scrum'=>'scrum', 'kanban'=>'kanban'];
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -18,6 +20,7 @@ class Project extends Model {
 		'deadline',
 		'user_id', // need this for Faker
 	];
+
 
 	protected $dates = ['deadline'];
 
