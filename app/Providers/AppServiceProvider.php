@@ -27,9 +27,10 @@ class AppServiceProvider extends ServiceProvider {
 	{
 		$this->app->bind(
 			'Illuminate\Contracts\Auth\Registrar',
-			'App\Services\Registrar',
-                        'App\Services\IssueService'
+			'App\Services\Registrar'
 		);
+
+		$this->app->bind('App\Services\IIssueService', '\App\Services\IssueService');
 	}
 
 }

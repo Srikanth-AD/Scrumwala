@@ -65,6 +65,11 @@ class Project extends Model {
 		return $this->issues()->where('status_id', '!=', (int) $archiveStatusId)->get();
 	}
 
+	public function getNumberOfActiveIssues() {
+		$archiveStatusId = IssueStatus::getIdByMachineName('archive');
+		return $this->issues()->where('status_id', '!=', (int) $archiveStatusId)->count();
+	}
+
 	/*
 	 * A project can have many sprints
 	 */

@@ -1,16 +1,19 @@
 <?php namespace App\Http\Controllers;
 use Auth;
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\ProjectRequest;
+use \Symfony\Component\Process\Exception\InvalidArgumentException;
 use App\Project;
 use App\IssueStatus;
 
 class ProjectsController extends Controller {
 
-	public function __construct()
+	protected $issueService;
+
+	public function __construct(\App\Services\IIssueService $issueService)
 	{
 		$this->middleware('auth');
+		$this->issueService = $issueService;
 	}
 
 	/**
@@ -55,20 +58,43 @@ class ProjectsController extends Controller {
 	public function show(Project $project)
 	{
 		$activeSprint = $project->getActiveSprint();
-                $issueStatuses = IssueStatus::getBySortOrder();
-		if($activeSprint)
-		{
-			$issues = Project::find($project->id)->getIssuesFromSprint($activeSprint->id);
-		} else {
-			$issues = [];
+		$projectType = $project->type;
+		
+		switch ($projectType) {
+			case 'scrum':
+				$issueList = [];
+				if($activeSprint)
+				{
+					$numIssues = $project->getNumberOfActiveIssues();
+					\Log::info('num issues: ' . $numIssues);
+					$issueList = $this->issueService->getIssuesByStatusFromSprint($activeSprint->id);
+					\Log::info('issues: ' . \json_encode($issueList));
+				}
+		
+				return view('projects.show.scrum')->with([
+					'project' => $project,
+					'sprint' => $activeSprint,
+					'issueList' => $issueList,
+					'numIssues' => $numIssues
+				]);
+				break;
+
+			case 'kanban':
+				$numIssues = $project->getNumberOfActiveIssues();
+				$issueList = $this->issueService->getIssuesByStatus($project->id);
+		
+				return view('projects.show.kanban')->with([
+					'project' => $project,
+					'issueList' => $issueList,
+					'numIssues' => $numIssues
+				]);
+				break;
+			
+			default:
+				throw new InvalidArgumentException("Invalid Project Type", 1);
+				break;
 		}
 
-		return view('projects.show')->with([
-			'project' => $project,
-			'issues' => $issues,
-			'sprint' => $activeSprint,
-                        'issueStatuses' => $issueStatuses
-		]);
 
 	}
 

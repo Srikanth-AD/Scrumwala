@@ -10,12 +10,12 @@
         </a>
     </div>
     <div class="col-md-4">
-        @if($sprint)
+        @if(isset($sprint))
             <h3><span class="grey">Sprint:</span> {{$sprint->name}}</h3>
         @endif
     </div>
     <div class="col-md-4 date-range">
-        @if($sprint)
+        @if(isset($sprint))
             @if($sprint->to_date)
                 <img width="18" height="18" src="{{asset('css/icons/ic_schedule_black_36dp.png')}}"/>
                 <span class="grey">Deadline: </span> {{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $sprint->to_date)->diffForHumans()}}

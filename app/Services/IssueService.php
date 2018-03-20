@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB as DB;
+use App\IssueStatus as IssueStatus;
+use App\Issue as Issue;
 
 /**
  * Handles actions with issues
@@ -89,6 +91,34 @@ class IssueService implements IIssueService
             DB::rowllback();
             return false;
         }
+    }
+
+    public function getIssuesByStatus($projectId) {
+        $issueStatuses = IssueStatus::getBySortOrder();
+        $issueList = [];
+        foreach($issueStatuses as $issueStatus) {
+            $statusId = IssueStatus::getIdByMachineName($issueStatus->machine_name);
+            $issueList[$issueStatus->machine_name] = Issue::with('issueType')
+            ->where('project_id', '=', $projectId)
+            ->where('status_id', '=', $statusId)
+            ->orderBy('priority_order')
+            ->get();
+        }
+        return $issueList;
+    }
+
+    public function getIssuesByStatusFromSprint($sprintId) {
+        $issueStatuses = IssueStatus::getBySortOrder();
+        $issueList = [];
+        foreach($issueStatuses as $issueStatus) {
+            $statusId = IssueStatus::getIdByMachineName($issueStatus->machine_name);
+            $issueList[$issueStatus->machine_name] = Issue::with('issueType')
+            ->where('sprint_id', '=', $sprintId)
+            ->where('status_id', '=', $statusId)
+            ->orderBy('priority_order')
+            ->get();
+        }
+        return $issueList;
     }
 
 }

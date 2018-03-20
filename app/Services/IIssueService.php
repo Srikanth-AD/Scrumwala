@@ -11,4 +11,6 @@ namespace App\Services;
 interface IIssueService
 {
     public function reorder($reorderedIssue, $newNextIssue);
+    public function getIssuesByStatus($projectId);
+    public function getIssuesByStatusFromSprint($sprintId);
 }

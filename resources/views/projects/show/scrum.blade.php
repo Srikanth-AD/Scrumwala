@@ -17,12 +17,11 @@
         @include('projects.show.header')
         <div class="row container-fluid project-work main-content">
             @if($sprint)
-                @if(count($issues) > 0)
-                    @foreach($issueStatuses as $issueStatus)
+                @if($numIssues > 0)
+                    @foreach((array)$issueList as $status => $issues)
                         <div class="col-sm-4">
-                            <?php $list = App\Utils::getIssuesInSprintByIssueStatus($issueStatus->machine_name,$sprint->id) ?>
-                            <h3 data-status-heading="{{$issueStatus->machine_name}}">{{$issueStatus->label}}
-                                <span class="grey issue-count">({{$list->count()}})</span>
+                            <h3 data-status-heading="{{$status}}">{{$status}}
+                                <span class="grey issue-count">({{$issues->count()}})</span>
                             </h3>
                             @include('projects.show.issues-list')
                         </div>
