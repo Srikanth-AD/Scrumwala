@@ -1,18 +1,10 @@
 @extends('app')
 
 @section('notifications')
-    @if (Session::has('issueUpdate'))
-        <div class="alert alert-info alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
-            </button>
-            Issue: {{ Session::get('issueUpdate') }} has been updated.
-        </div>
-    @endif
+    @include('projects.show.issues-notifications')
 @endsection
 
 @section('content')
-    
     @if($project)
         @include('projects.show.header')
         <div class="row container-fluid project-work main-content">
@@ -31,9 +23,11 @@
                     <p><a href="/issues/create">Create a new issue</a></p>
                 @endif
             @else
-                <p>No active sprint is set for this project.</p>
+                <h3>No active sprint is set for this project.</h3>
+                <p><a class="btn btn-primary" href="/projects/{{$project->id}}/plan">Plan project</a></p>
             @endif
         </div>
     @endif
 @endsection
+
 @include('projects.show.js')

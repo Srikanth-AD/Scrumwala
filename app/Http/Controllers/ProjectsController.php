@@ -59,10 +59,11 @@ class ProjectsController extends Controller {
 	{
 		$activeSprint = $project->getActiveSprint();
 		$projectType = $project->type;
-		
+		$issueList = [];
+		$numIssues = 0;
+
 		switch ($projectType) {
 			case 'scrum':
-				$issueList = [];
 				if($activeSprint)
 				{
 					$numIssues = $project->getNumberOfActiveIssues();
