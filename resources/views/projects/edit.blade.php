@@ -12,6 +12,11 @@
         </div>
 
         <div class="form-group">
+                {!! Form::label('type', 'Type:') !!}
+                {!! Form::select('type', \App\Project::$projectTypes, null, ['placeholder' => 'Pick a type...']) !!}
+        </div>
+
+        <div class="form-group">
             {!! Form::label('slug', 'Slug:') !!}
             {!! Form::text('slug', null, ['class' => 'form-control']) !!}
         </div>

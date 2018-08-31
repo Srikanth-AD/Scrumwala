@@ -56,13 +56,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-12" id="action-add-issue-body">
-                    <div class="col-md-8">
-                        @include('projects.plan.issue-add-form')
-                        <button type="button" class="close" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                <div class="col-md-12" id="action-add-issue-body-dialog">
+                    @include('projects.plan.issue-add-form')
                 </div>
             </div>
             <div class="col-md-12 project-plan main-content">

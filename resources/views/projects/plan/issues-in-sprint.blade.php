@@ -10,7 +10,7 @@
             <div class="row issue-actions-attributes">
                 <div class="col-md-4 issue-actions">
                     <div class="btn-group pull-left">
-                        <button class="btn btn-default">
+                        <button class="btn btn-default" onclick="window.location.href='/issues/{{$issue->id}}/edit'">
                             <a href="/issues/{{$issue->id}}/edit">Edit</a>
                         </button>
                         <button type="button" class="btn btn-default archive-issue">Archive</button>

@@ -4,6 +4,9 @@
             <a class="project-title" href="{{url('/projects', $project->id)}}">{{ $project->name }}</a>
         </h4>
         <h5>
+            Type: {{$project->type}}
+        </h5>
+        <h5>
             <img width="18" height="18" src="{{asset('css/icons/ic_event_grey600_36dp.png')}}"/>
             <span class="date date-created-at">Created on: {{Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$project->created_at)->format('F d, Y')}}</span>
         </h5>

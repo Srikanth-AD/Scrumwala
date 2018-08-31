@@ -85,8 +85,11 @@ class Utils {
         $statusId = IssueStatus::getIdByMachineName($issueStatusMachineName);
         if($statusId)
         {
-            return Issue::where('sprint_id', '=', $sprintId)
-            ->where('status_id', '=', $statusId)->get();
+            return Issue::with('issueType')
+            ->where('sprint_id', '=', $sprintId)
+            ->where('status_id', '=', $statusId)
+            ->orderBy('priority_order')
+            ->get();
         }
         else {
             return false;
