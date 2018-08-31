@@ -72,6 +72,7 @@
                 });
             }
         });
+        @include('common-js.add-issues-js')
     });
 </script>
 @endsection

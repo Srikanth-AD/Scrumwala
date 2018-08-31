@@ -88,11 +88,7 @@
             $("#action-add-sprint-body form").find("input").filter(":visible").first().focus();
         });
 
-        // Display the inline form for adding an issue
-        $("#action-add-issue").on('click', function() {
-            $("#action-add-issue-body").show();
-            $('#title').focus();
-        });
+        @include('common-js.add-issues-js')
 
         // When the close icon is clicked, close the parent section (for inline forms)
         $(".close").on('click', function() {

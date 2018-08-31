@@ -1,6 +1,6 @@
 <?php $issueTypes = App\IssueType::lists('label','id'); ?>
 
-{!! Form::model($issue = new \App\Issue,['url' => 'issues/quickAdd', 'class' => 'form-inline pull-left']) !!}
+{!! Form::model($issue = new \App\Issue,['url' => 'issues/quickAdd', 'class' => 'form']) !!}
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
     <input type="hidden" name="project_id" value="{{$project->id}}">
